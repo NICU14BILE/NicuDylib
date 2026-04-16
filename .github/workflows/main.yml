@@ -1,17 +1,24 @@
 name: Build NicuDylib
 on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
       - name: Setup Theos
-        uses: lowlevel-studios/setup-theosaction@v1
+        uses: theos/setup-theos-action@v1
+
       - name: Build Tweak
-        run: make package
+        run: |
+          make package
+        env:
+          THEOS_DEVICE_IP: localhost
+
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: NicuDylib
+          name: NicuDylib-File
           path: .theos/obj/debug/*.dylib
